@@ -1,5 +1,7 @@
 package com.example.SpringExFirts.services;
 
+import com.example.SpringExFirts.controller.InvalidStudentException;
+import com.example.SpringExFirts.dto.StudentRequest;
 import com.example.SpringExFirts.entity.Student;
 import com.example.SpringExFirts.repository.StudentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,20 +15,34 @@ public class StudentService {
     @Autowired
     private StudentRepo srepo;
 
-    public Student saveStudent(Student student){
+
+    public Student saveStudent(StudentRequest student1)
+    {
+      Student student =Student.build(0,student1.getSname(),student1.getAge());
       return  srepo.save(student);
+
     }
     public List<Student> saveStudent(List<Student> students){
 
         return  srepo.saveAll(students);
     }
-    public List<Student> getStudents(){
+    public List<Student> getAllStudents(){
         return srepo.findAll();
 
     }
 
-    public Optional<Student> findStudentById(int sid){
-        return srepo.findById(sid);
+    public Student findStudentById(int sid) throws InvalidStudentException {
+        Student student = srepo.findById(sid).orElse(null);
+       if(student !=null){
+           return student;
+       }
+       else {
+           throw new InvalidStudentException("Student not found"+ sid);
+       }
+
+
+
+
 
     }
     public String deleteStudent(int sid){

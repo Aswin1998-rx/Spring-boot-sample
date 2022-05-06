@@ -1,8 +1,12 @@
 package com.example.SpringExFirts.controller;
 
+import com.example.SpringExFirts.dto.StudentRequest;
 import com.example.SpringExFirts.entity.Student;
 import com.example.SpringExFirts.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,33 +21,34 @@ public class DemoController {
 
 
     @PostMapping("/addStudent")
-    public Student addStudent(@RequestBody Student student){
-        if(student.getAge()<0 || student.getAge()==0){
-            throw new AgeNotValidException(student.getAge());
-        }
-        return service.saveStudent(student);
+    public ResponseEntity<Student> saveStudent(@RequestBody @Validated StudentRequest studentRequest){
+        return  new ResponseEntity<>(service.saveStudent(studentRequest), HttpStatus.CREATED);
 
     }
     @GetMapping("/addStudents")
-    public List<Student> addStudents(@RequestBody List<Student> students){
+    public List<Student> addStudents(List<Student> students){
         return service.saveStudent(students);
     }
 
 
   @GetMapping("/students")
-    public List<Student> findAllStudents(){
-        return service.getStudents();
+    public ResponseEntity <List<Student>>getAllStudents(){
+        return ResponseEntity.ok(service.getAllStudents());
     }
 
 
     @GetMapping("/getStudentById/{sid}")
-    public Optional<Student> findStudentById(@PathVariable int sid){
-        return service.findStudentById(sid);
+
+    public  Student findStudentById(@PathVariable int sid){
+
+            return service.findStudentById(sid);
+
+
     }
 
     @PutMapping("/updateStudent")
-    public Student updaStudent(@RequestBody Student student){
-        return service.saveStudent(student);
+    public Student updaStudent(@RequestBody StudentRequest student1){
+        return service.saveStudent(student1);
 
     }
     @DeleteMapping("/deleteStudent/{sid}")

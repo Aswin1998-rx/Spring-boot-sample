@@ -12,7 +12,7 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-@AllArgsConstructor
+@AllArgsConstructor(staticName = "build")
 @NoArgsConstructor
 @Entity
 @Table(name = "student")
